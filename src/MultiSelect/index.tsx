@@ -341,7 +341,7 @@ const MultiSelectComponent = React.forwardRef((props: MultiSelectProps, currentR
           isFull,
           w,
           top,
-          bottom: parseInt(bottom),
+          bottom: parseInt(bottom + ''),
           left,
           height: parseInt(py)
         });
