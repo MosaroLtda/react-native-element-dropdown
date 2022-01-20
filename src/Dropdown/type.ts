@@ -25,6 +25,8 @@ export interface IProps {
   showsVerticalScrollIndicator?: boolean;
   dropdownPosition?: 'auto' | 'top' | 'bottom';
   flatListProps?: any;
+  initialNumToRender?: number;
+  maxToRenderPerBatch?: number;
   searchFunction?: (inputSearchText: string, labelText: string) => boolean;
   onChange: (item: any) => void;
   renderLeftIcon?: () => JSX.Element | null | undefined;
