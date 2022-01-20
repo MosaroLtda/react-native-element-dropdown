@@ -103,18 +103,42 @@ const DropdownComponent = React.forwardRef((props: DropdownProps, currentRef) =>
     }
 
     const dataFilter = data.filter(searchFunction ? propSearchFunction : defaultFilterFunction);
-    const wordsSearchText = searchText?.normalize('NFD').replace(/[\u0300-\u036f]/g, '')?.split(' ') || [];
+    const wordsSearchText = searchText?.normalize('NFD')?.replace?.(/[\u0300-\u036f]/g, '')?.split(' ') || [];
 
-    const splitDataReducer = (str = '') => str?.split?.(' ')?.reduce?.((acc, act) => {
-      return acc + wordsSearchText?.filter?.((word) => serialize(word) === serialize(act))?.length || 0
-    }, 0);
+    const getCountOccurrences = (str = '') => {
+      const arrWordsLabel = [...new Set(str?.split?.(' '))];
 
-    return dataFilter.sort((a,b) => {
-      let countA = splitDataReducer(a);
-      let countB = splitDataReducer(b);
-  
-      return countB - countA
+      return arrWordsLabel?.reduce?.((acc, word2) => {
+        return acc + wordsSearchText?.filter?.((word) => {
+          return serialize(word) === serialize(word2);
+        })?.length || 0
+      }, 0)
+    };
+
+    const getCountInOrder = (str = '') => {
+      const strWords = str?.split?.(' ');
+
+      return wordsSearchText?.reduce?.((acm, word, index) => {
+        return acm + (serialize(strWords[index]) === serialize(word) ? 1 : 0);
+      }, 0)
+    };
+
+    const arrOrderned = dataFilter.sort((a,b) => {
+      const textA = _.get(a, labelField);
+      const textB = _.get(b, labelField);
+
+      let countOrderA = getCountInOrder(textA);
+      let countOrderB = getCountInOrder(textB);
+
+      if (countOrderA !== countOrderB) return countOrderB - countOrderA;
+
+      let countA = getCountOccurrences(textA);
+      let countB = getCountOccurrences(textB);
+
+      return countB - countA;
     });
+
+    return arrOrderned;
   }, [data, searchFunction, disable, searchText]);
 
   const font = React.useMemo(() => fontFamily ? { fontFamily } : {}, [fontFamily]);
